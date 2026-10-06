@@ -2,7 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 
-from odoo import SUPERUSER_ID, api
+from odoo import SUPERUSER_ID, _, api
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -26,15 +27,15 @@ RTE_ICA_TAXES = {
 }
 
 ACCOUNT_MAPPINGS = {
-    "co_puc_236515": "co_puc_135515",
-    "co_puc_236520": "co_puc_135515",
-    "co_puc_236525": "co_puc_135515",
-    "co_puc_236530": "co_puc_135515",
-    "co_puc_236535": "co_puc_135515",
-    "co_puc_236540": "co_puc_135515",
-    "co_puc_236550": "co_puc_135515",
-    "co_puc_236700": "co_puc_135517",
-    "co_puc_236800": "co_puc_135518",
+    "236515": "135515",
+    "236520": "135515",
+    "236525": "135515",
+    "236530": "135515",
+    "236535": "135515",
+    "236540": "135515",
+    "236550": "135515",
+    "236700": "135517",
+    "236800": "135518",
 }
 
 # Cuenta de pasivo (tipo 23) equivalente a la de activo (tipo 13) usada
@@ -257,11 +258,14 @@ def _get_or_create_zero_tax(env, company, name, tax_group_xmlid, wh_type):
     )
     if existing:
         return existing
-    tax_group = env.ref(tax_group_xmlid, raise_if_not_found=False)
+    tax_group = _find_chart_record(env, company, tax_group_xmlid)
     if not tax_group:
-        tax_group = env["account.tax.group"].search(
-            [("company_id", "in", (company.id, False))],
-            limit=1,
+        raise UserError(
+            _(
+                "Missing withholding tax group %(xmlid)s for %(company)s.",
+                xmlid=tax_group_xmlid,
+                company=company.display_name,
+            )
         )
     return env["account.tax"].create(
         {
@@ -277,14 +281,23 @@ def _get_or_create_zero_tax(env, company, name, tax_group_xmlid, wh_type):
     )
 
 
-def _find_tax_by_xmlid(env, company, xmlid):
-    tax = env.ref(xmlid, raise_if_not_found=False)
-    if tax and tax.company_id == company:
-        return tax
-    return env["account.tax"].search(
-        [("company_id", "=", company.id), ("name", "ilike", xmlid.split(".")[-1])],
-        limit=1,
+def _find_chart_record(env, company, xmlid):
+    """Resolve Odoo 18 chart records in the requested company."""
+    record = (
+        env["account.chart.template"]
+        .with_company(company)
+        .ref(
+            xmlid.split(".")[-1],
+            raise_if_not_found=False,
+        )
     )
+    if not record:
+        record = env.ref(xmlid, raise_if_not_found=False)
+    return record if record and record.company_id == company else False
+
+
+def _find_tax_by_xmlid(env, company, xmlid):
+    return _find_chart_record(env, company, xmlid)
 
 
 def _find_account_by_code(env, company, code):
