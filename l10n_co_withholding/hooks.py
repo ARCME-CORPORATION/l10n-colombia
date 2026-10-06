@@ -7,23 +7,12 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
-RTE_FTE_TAXES = {
-    "l10n_co_tax_23": {"name": "4% RteFte S L", "amount": -4.0},
-    "l10n_co_tax_25": {"name": "6% RteFte S G", "amount": -6.0},
-    "l10n_co_tax_32": {"name": "10% RteFte N", "amount": -10.0},
-    "l10n_co_tax_40": {"name": "11% RteFte F L E", "amount": -11.0},
-    "l10n_co_tax_19": {"name": "2.5% RteFte D", "amount": -2.5},
-    "l10n_co_tax_27": {"name": "3.5% RteFte Soft", "amount": -3.5},
-}
-
-RTE_IVA_TAXES = {
-    "l10n_co_tax_12": {"name": "15% RteVAT 19%", "amount": -2.85},
-    "l10n_co_tax_13": {"name": "15% RteVAT 5%", "amount": -0.75},
-}
-
-RTE_ICA_TAXES = {
-    "l10n_co_tax_44": {"name": "0.69% RteICA", "amount": -0.69},
-    "l10n_co_tax_45": {"name": "1.104% RteICA", "amount": -1.104},
+# Template IDs from Odoo 18 l10n_co/data/template/account.tax-co.csv.
+# Include the zero-rate ICA tax; exclude positive purchase counterparts.
+WITHHOLDING_TAX_XMLIDS = {
+    "rte_fte": tuple(f"l10n_co_tax_{n}" for n in (*range(16, 43), 53, 54)),
+    "rte_iva": tuple(f"l10n_co_tax_{n}" for n in (12, 13, 55, 56)),
+    "rte_ica": tuple(f"l10n_co_tax_{n}" for n in (*range(43, 49), 57, 58)),
 }
 
 ACCOUNT_MAPPINGS = {
@@ -55,8 +44,40 @@ def _l10n_co_withholding_post_init(env):
     _set_default_uvt_value(env)
     companies = env["res.company"].search([("chart_template", "=", "co")])
     for company in companies:
+        _configure_chart_withholding_taxes(env, company)
         _setup_withholding_for_company(env, company)
         _create_sales_withholding_counterparts(env, company)
+
+
+def _configure_chart_withholding_taxes(env, company):
+    """Classify existing chart taxes without changing rates or accounts."""
+    for wh_type, xmlids in WITHHOLDING_TAX_XMLIDS.items():
+        for xmlid in xmlids:
+            tax = _find_tax_by_xmlid(env, company, f"l10n_co.{xmlid}")
+            if (
+                tax
+                and tax.type_tax_use in ("purchase", "sale")
+                and tax.amount <= 0
+                and not tax.l10n_co_withholding_counterpart
+                and not tax.l10n_co_withholding_type
+            ):
+                tax.l10n_co_withholding_type = wh_type
+
+
+def _get_purchase_withholding_taxes(env, company, wh_types):
+    return (
+        env["account.tax"]
+        .with_context(active_test=False)
+        .search(
+            [
+                ("company_id", "=", company.id),
+                ("type_tax_use", "=", "purchase"),
+                ("amount", "<", 0),
+                ("l10n_co_withholding_type", "in", wh_types),
+                ("l10n_co_withholding_counterpart", "=", False),
+            ]
+        )
+    )
 
 
 def _get_sales_withholding_taxes(env, company):
@@ -230,18 +251,14 @@ def _setup_withholding_for_company(env, company):
         "l10n_co.tax_group_r_iva_075",
         "rte_iva",
     )
-    rte_ica_0 = env["account.tax"].search(
-        [
-            ("company_id", "=", company.id),
-            ("name", "=", "0% RteICA"),
-            ("amount", "=", 0.0),
-        ],
-        limit=1,
-    )
-    if not rte_ica_0:
-        rte_ica_0 = env["account.tax"].search(
-            [("company_id", "=", company.id), ("name", "=", "0% RteICA")],
-            limit=1,
+    rte_ica_0 = _find_tax_by_xmlid(env, company, "l10n_co.l10n_co_tax_43")
+    if not rte_ica_0 or rte_ica_0.amount != 0 or rte_ica_0.type_tax_use != "purchase":
+        rte_ica_0 = _get_or_create_zero_tax(
+            env,
+            company,
+            "0% RteICA",
+            "l10n_co.tax_group_r_ica_0",
+            "rte_ica",
         )
     _create_fiscal_position_simple(env, company, rte_fte_0)
     _create_fiscal_position_non_taxpayer(env, company, rte_fte_0, rte_iva_0, rte_ica_0)
@@ -348,8 +365,7 @@ def _create_fiscal_position_simple(env, company, rte_fte_0):
                 "company_id": company.id,
             },
         )
-    for xmlid in RTE_FTE_TAXES:
-        src_tax = _find_tax_by_xmlid(env, company, f"l10n_co.{xmlid}")
+    for src_tax in _get_purchase_withholding_taxes(env, company, ["rte_fte"]):
         if src_tax:
             existing = env["account.fiscal.position.tax"].search(
                 [
@@ -384,8 +400,7 @@ def _create_fiscal_position_non_taxpayer(env, company, rte_fte_0, rte_iva_0, rte
                 "company_id": company.id,
             },
         )
-    for xmlid in RTE_FTE_TAXES:
-        src_tax = _find_tax_by_xmlid(env, company, f"l10n_co.{xmlid}")
+    for src_tax in _get_purchase_withholding_taxes(env, company, ["rte_fte"]):
         if src_tax:
             existing = env["account.fiscal.position.tax"].search(
                 [
@@ -402,8 +417,7 @@ def _create_fiscal_position_non_taxpayer(env, company, rte_fte_0, rte_iva_0, rte
                         "tax_dest_id": rte_fte_0.id,
                     },
                 )
-    for xmlid in RTE_IVA_TAXES:
-        src_tax = _find_tax_by_xmlid(env, company, f"l10n_co.{xmlid}")
+    for src_tax in _get_purchase_withholding_taxes(env, company, ["rte_iva"]):
         if src_tax:
             existing = env["account.fiscal.position.tax"].search(
                 [
@@ -420,8 +434,7 @@ def _create_fiscal_position_non_taxpayer(env, company, rte_fte_0, rte_iva_0, rte
                         "tax_dest_id": rte_iva_0.id,
                     },
                 )
-    for xmlid in RTE_ICA_TAXES:
-        src_tax = _find_tax_by_xmlid(env, company, f"l10n_co.{xmlid}")
+    for src_tax in _get_purchase_withholding_taxes(env, company, ["rte_ica"]):
         if src_tax and rte_ica_0:
             existing = env["account.fiscal.position.tax"].search(
                 [

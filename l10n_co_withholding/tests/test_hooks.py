@@ -169,3 +169,123 @@ class TestWithholdingHooks(TransactionCase):
                     src,
                 )
             )
+
+    def _prepare_purchase_chart(self):
+        for key in ("tax_group_r_iva_075", "tax_group_r_ica_0"):
+            group = self.env["account.tax.group"].create(
+                {
+                    "name": key,
+                    "company_id": self.company.id,
+                    "country_id": self.company.country_id.id,
+                }
+            )
+            self.env["ir.model.data"].create(
+                {
+                    "module": "account",
+                    "name": f"{self.company.id}_{key}",
+                    "model": "account.tax.group",
+                    "res_id": group.id,
+                }
+            )
+        taxes = self.tax
+        for number, amount in [(16, -0.1), (12, -2.85), (46, -0.414), (43, 0)]:
+            tax = self.env["account.tax"].create(
+                {
+                    "name": f"Renamed purchase tax {number}",
+                    "amount": amount,
+                    "type_tax_use": "purchase",
+                    "company_id": self.company.id,
+                    "tax_group_id": self.group.id,
+                }
+            )
+            self.env["ir.model.data"].create(
+                {
+                    "module": "account",
+                    "name": f"{self.company.id}_l10n_co_tax_{number}",
+                    "model": "account.tax",
+                    "res_id": tax.id,
+                }
+            )
+            taxes |= tax
+        return taxes
+
+    def test_purchase_types_and_preserved_configuration(self):
+        taxes = self._prepare_purchase_chart()
+        before = taxes.read(
+            [
+                "amount",
+                "type_tax_use",
+                "invoice_repartition_line_ids",
+                "refund_repartition_line_ids",
+            ]
+        )
+        hooks._configure_chart_withholding_taxes(self.env, self.company)
+        self.assertEqual(
+            set(taxes.mapped("l10n_co_withholding_type")),
+            {"rte_fte", "rte_iva", "rte_ica"},
+        )
+        self.assertEqual(
+            before,
+            taxes.read(
+                [
+                    "amount",
+                    "type_tax_use",
+                    "invoice_repartition_line_ids",
+                    "refund_repartition_line_ids",
+                ]
+            ),
+        )
+        self.tax.l10n_co_withholding_type = "rte_iva"
+        hooks._configure_chart_withholding_taxes(self.env, self.company)
+        self.assertEqual(self.tax.l10n_co_withholding_type, "rte_iva")
+        self.assertFalse(self.company.l10n_co_is_retention_agent)
+        self.assertFalse(self.company.l10n_co_default_rte_fte_tax_ids)
+
+    def test_future_setup_maps_all_purchase_types_without_counterparts(self):
+        taxes = self._prepare_purchase_chart()
+        hooks._configure_chart_withholding_taxes(self.env, self.company)
+        hooks._setup_withholding_for_company(self.env, self.company)
+        hooks._create_sales_withholding_counterparts(self.env, self.company)
+        positions = self.env["account.fiscal.position"].search(
+            [("company_id", "=", self.company.id)]
+        )
+        simple = positions.filtered(lambda p: p.name == "Régimen Simple (Sin ReteFte)")
+        non_taxpayer = positions.filtered(
+            lambda p: p.name == "No Contribuyente (Sin Retenciones)"
+        )
+        self.assertEqual(len(simple.tax_ids), 2)
+        self.assertEqual(len(non_taxpayer.tax_ids), 4)
+        self.assertEqual(
+            non_taxpayer.tax_ids.tax_src_id, taxes.filtered(lambda t: t.amount < 0)
+        )
+        self.assertTrue(
+            all(
+                t.amount == 0 and t.type_tax_use == "purchase"
+                for t in non_taxpayer.tax_ids.tax_dest_id
+            )
+        )
+        self.assertFalse(taxes.filtered("l10n_co_withholding_counterpart"))
+        self.assertFalse(
+            self.env["account.tax"].search(
+                [
+                    ("company_id", "=", self.company.id),
+                    ("l10n_co_withholding_counterpart", "=", True),
+                ]
+            )
+        )
+        original_ids = positions.tax_ids.ids
+        tax_ids = (
+            self.env["account.tax"].search([("company_id", "=", self.company.id)]).ids
+        )
+        hooks._configure_chart_withholding_taxes(self.env, self.company)
+        hooks._setup_withholding_for_company(self.env, self.company)
+        self.assertEqual(positions.tax_ids.ids, original_ids)
+        self.assertEqual(
+            self.env["account.tax"].search([("company_id", "=", self.company.id)]).ids,
+            tax_ids,
+        )
+
+    def test_positive_chart_tax_is_not_classified(self):
+        self.tax.amount = 4
+        hooks._configure_chart_withholding_taxes(self.env, self.company)
+        self.assertFalse(self.tax.l10n_co_withholding_type)

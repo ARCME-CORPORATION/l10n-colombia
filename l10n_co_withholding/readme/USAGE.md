@@ -1,3 +1,23 @@
+Inicialización de nuevas instalaciones
+--------------------------------------
+
+Configure primero el plan contable colombiano de la compañía y después instale
+este módulo. El post_init_hook prepara la configuración durante la instalación;
+una actualización del módulo no vuelve a ejecutar este hook.
+
+- Clasifica las retenciones del plan contable en ReteFte, ReteIVA y ReteICA,
+  tanto de compras como de ventas, usando sus referencias por compañía.
+- En compras, prepara impuestos al 0 % y mapea todas las retenciones negativas
+  clasificadas a esos impuestos en las posiciones fiscales correspondientes.
+  Incluye impuestos archivados en los mapeos sin reactivarlos.
+- En ventas, crea las contrapartidas positivas de las retenciones.
+- Conserva tarifas, cuentas de los impuestos y clasificaciones ya configuradas.
+  No activa automáticamente la condición de agente de retención ni selecciona
+  retenciones por defecto; estas opciones se configuran para cada compañía.
+
+Este cambio está destinado a futuras instalaciones. No incorpora migraciones,
+acciones automáticas ni ejecuciones sobre clientes que ya tienen el módulo.
+
 Configuración de la Compañía
 -----------------------------
 
