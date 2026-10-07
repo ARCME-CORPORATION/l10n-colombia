@@ -1,0 +1,63 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * l10n_co_financial_report
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_co_financial_report
+#: model:ir.model.fields,field_description:l10n_co_financial_report.field_account_account__l10n_co_statement_category
+msgid "Colombian financial statement category"
+msgstr "Categoría de estados financieros colombianos"
+
+#. module: l10n_co_financial_report
+#: model:ir.model.fields,field_description:l10n_co_financial_report.field_account_move__l10n_co_equity_movement
+msgid "Colombian equity movement"
+msgstr "Movimiento de patrimonio colombiano"
+
+#. module: l10n_co_financial_report
+#: model:ir.model.fields,field_description:l10n_co_financial_report.field_l10n_co_financial_report_wizard__comparison
+msgid "Compare with previous year"
+msgstr "Comparar con el año anterior"
+
+#. module: l10n_co_financial_report
+#: model:ir.model.fields,field_description:l10n_co_financial_report.field_l10n_co_financial_report_wizard__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: l10n_co_financial_report
+#: model:ir.model.fields,field_description:l10n_co_financial_report.field_l10n_co_financial_report_wizard__date_from
+msgid "Date From"
+msgstr "Fecha inicial"
+
+#. module: l10n_co_financial_report
+#: model:ir.model.fields,field_description:l10n_co_financial_report.field_l10n_co_financial_report_wizard__date_to
+msgid "Date To"
+msgstr "Fecha final"
+
+#. module: l10n_co_financial_report
+#: model:ir.ui.menu,name:l10n_co_financial_report.financial_report_menu
+#: model:ir.actions.act_window,name:l10n_co_financial_report.financial_report_wizard_action
+#: model_terms:ir.ui.view,arch_db:l10n_co_financial_report.financial_report_wizard_form
+msgid "Colombian Financial Statements"
+msgstr "Estados financieros colombianos"
+
+#. module: l10n_co_financial_report
+#: model_terms:ir.ui.view,arch_db:l10n_co_financial_report.financial_report_wizard_form
+msgid "Create reports"
+msgstr "Crear informes"
+
+#. module: l10n_co_financial_report
+#: model_terms:ir.ui.view,arch_db:l10n_co_financial_report.financial_report_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: l10n_co_financial_report
+#: model_terms:ir.ui.view,arch_db:l10n_co_financial_report.financial_report_wizard_form
+msgid "Review account categories and equity movements before issuing statements."
+msgstr "Revise las categorías de cuentas y los movimientos del patrimonio antes de emitir los estados financieros."

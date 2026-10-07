@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="style_default" model="mis.report.style">
+        <field name="name">Colombia - Estados financieros</field>
+        <field name="dp_inherit" eval="False" />
+        <field name="dp">0</field>
+        <field name="hide_empty_inherit" eval="False" />
+        <field name="hide_empty" eval="False" />
+    </record>
+    <record id="report_bs" model="mis.report">
+        <field name="name">Estado de Situación Financiera</field>
+        <field name="description">Cifras expresadas en la moneda de la compañía. Revisar la clasificación contable antes de emitir.</field>
+        <field name="style_id" ref="style_default" />
+    </record>
+    <record id="report_pl" model="mis.report">
+        <field name="name">Estado de Resultado Integral</field>
+        <field name="description">Cifras expresadas en la moneda de la compañía. Revisar la clasificación contable antes de emitir.</field>
+        <field name="style_id" ref="style_default" />
+    </record>
+    <record id="report_equity" model="mis.report">
+        <field name="name">Estado de Cambios en el Patrimonio</field>
+        <field name="description">Cifras expresadas en la moneda de la compañía. Revisar la clasificación contable antes de emitir.</field>
+        <field name="style_id" ref="style_default" />
+    </record>
+    <record id="bs_current_assets_header" model="mis.report.kpi">
+        <field name="name">current_assets_header</field>
+        <field name="description">Activos corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">0</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">0</field>
+    </record>
+    <record id="bs_cash" model="mis.report.kpi">
+        <field name="name">cash</field>
+        <field name="description">Efectivo y equivalentes de efectivo</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">10</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('cash',))][]</field>
+    </record>
+    <record id="bs_investments_current" model="mis.report.kpi">
+        <field name="name">investments_current</field>
+        <field name="description">Inversiones corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">20</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('investments_current',))][]</field>
+    </record>
+    <record id="bs_trade_receivables" model="mis.report.kpi">
+        <field name="name">trade_receivables</field>
+        <field name="description">Deudores comerciales</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">30</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('trade_receivables',))][]</field>
+    </record>
+    <record id="bs_shareholder_receivables" model="mis.report.kpi">
+        <field name="name">shareholder_receivables</field>
+        <field name="description">Cuentas por cobrar a socios</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">40</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('shareholder_receivables',))][]</field>
+    </record>
+    <record id="bs_tax_receivables" model="mis.report.kpi">
+        <field name="name">tax_receivables</field>
+        <field name="description">Impuestos por cobrar</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">50</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('tax_receivables',))][]</field>
+    </record>
+    <record id="bs_employee_receivables" model="mis.report.kpi">
+        <field name="name">employee_receivables</field>
+        <field name="description">Cuentas por cobrar a trabajadores</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">60</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('employee_receivables',))][]</field>
+    </record>
+    <record id="bs_other_receivables" model="mis.report.kpi">
+        <field name="name">other_receivables</field>
+        <field name="description">Otros deudores</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">70</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('other_receivables',))][]</field>
+    </record>
+    <record id="bs_inventory" model="mis.report.kpi">
+        <field name="name">inventory</field>
+        <field name="description">Inventarios</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">80</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('inventory',))][]</field>
+    </record>
+    <record id="bs_prepayments" model="mis.report.kpi">
+        <field name="name">prepayments</field>
+        <field name="description">Pagos anticipados</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">90</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('prepayments',))][]</field>
+    </record>
+    <record id="bs_other_current_assets" model="mis.report.kpi">
+        <field name="name">other_current_assets</field>
+        <field name="description">Otros activos corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">100</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('other_current_assets',))][]</field>
+    </record>
+    <record id="bs_current_assets" model="mis.report.kpi">
+        <field name="name">current_assets</field>
+        <field name="description">Total activos corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">110</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">cash + investments_current + trade_receivables + shareholder_receivables + tax_receivables + employee_receivables + other_receivables + inventory + prepayments + other_current_assets</field>
+    </record>
+    <record id="bs_noncurrent_assets_header" model="mis.report.kpi">
+        <field name="name">noncurrent_assets_header</field>
+        <field name="description">Activos no corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">120</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">0</field>
+    </record>
+    <record id="bs_leased_ppe" model="mis.report.kpi">
+        <field name="name">leased_ppe</field>
+        <field name="description">Propiedades, planta y equipo en arrendamiento</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">130</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('leased_ppe',))][]</field>
+    </record>
+    <record id="bs_ppe" model="mis.report.kpi">
+        <field name="name">ppe</field>
+        <field name="description">Propiedades, planta y equipo</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">140</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('ppe',))][]</field>
+    </record>
+    <record id="bs_intangibles" model="mis.report.kpi">
+        <field name="name">intangibles</field>
+        <field name="description">Intangibles</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">150</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('intangibles',))][]</field>
+    </record>
+    <record id="bs_deferred_tax_assets" model="mis.report.kpi">
+        <field name="name">deferred_tax_assets</field>
+        <field name="description">Activos por impuesto diferido</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">160</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('deferred_tax_assets',))][]</field>
+    </record>
+    <record id="bs_other_noncurrent_assets" model="mis.report.kpi">
+        <field name="name">other_noncurrent_assets</field>
+        <field name="description">Otros activos no corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">170</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('l10n_co_statement_category', 'in', ('other_noncurrent_assets',))][]</field>
+    </record>
+    <record id="bs_noncurrent_assets" model="mis.report.kpi">
+        <field name="name">noncurrent_assets</field>
+        <field name="description">Total activos no corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">180</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">leased_ppe + ppe + intangibles + deferred_tax_assets + other_noncurrent_assets</field>
+    </record>
+    <record id="bs_current_liabilities_header" model="mis.report.kpi">
+        <field name="name">current_liabilities_header</field>
+        <field name="description">Pasivos corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">210</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">0</field>
+    </record>
+    <record id="bs_borrowings_current" model="mis.report.kpi">
+        <field name="name">borrowings_current</field>
+        <field name="description">Obligaciones financieras corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">220</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('borrowings_current',))][]</field>
+    </record>
+    <record id="bs_trade_payables" model="mis.report.kpi">
+        <field name="name">trade_payables</field>
+        <field name="description">Proveedores</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">230</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('trade_payables',))][]</field>
+    </record>
+    <record id="bs_other_current_liabilities" model="mis.report.kpi">
+        <field name="name">other_current_liabilities</field>
+        <field name="description">Otras cuentas por pagar corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">240</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('other_current_liabilities',))][]</field>
+    </record>
+    <record id="bs_shareholder_payables" model="mis.report.kpi">
+        <field name="name">shareholder_payables</field>
+        <field name="description">Cuentas por pagar a socios</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">250</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('shareholder_payables',))][]</field>
+    </record>
+    <record id="bs_tax_payables" model="mis.report.kpi">
+        <field name="name">tax_payables</field>
+        <field name="description">Impuestos corrientes por pagar</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">260</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('tax_payables',))][]</field>
+    </record>
+    <record id="bs_employee_benefits" model="mis.report.kpi">
+        <field name="name">employee_benefits</field>
+        <field name="description">Beneficios a empleados corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">270</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('employee_benefits',))][]</field>
+    </record>
+    <record id="bs_current_liabilities" model="mis.report.kpi">
+        <field name="name">current_liabilities</field>
+        <field name="description">Total pasivos corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">280</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">borrowings_current + trade_payables + other_current_liabilities + shareholder_payables + tax_payables + employee_benefits</field>
+    </record>
+    <record id="bs_noncurrent_liabilities_header" model="mis.report.kpi">
+        <field name="name">noncurrent_liabilities_header</field>
+        <field name="description">Pasivos no corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">290</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">0</field>
+    </record>
+    <record id="bs_borrowings_noncurrent" model="mis.report.kpi">
+        <field name="name">borrowings_noncurrent</field>
+        <field name="description">Obligaciones financieras no corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">300</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('borrowings_noncurrent',))][]</field>
+    </record>
+    <record id="bs_provisions_noncurrent" model="mis.report.kpi">
+        <field name="name">provisions_noncurrent</field>
+        <field name="description">Provisiones no corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">310</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('provisions_noncurrent',))][]</field>
+    </record>
+    <record id="bs_advances_noncurrent" model="mis.report.kpi">
+        <field name="name">advances_noncurrent</field>
+        <field name="description">Anticipos recibidos no corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">320</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('advances_noncurrent',))][]</field>
+    </record>
+    <record id="bs_deferred_tax_liabilities" model="mis.report.kpi">
+        <field name="name">deferred_tax_liabilities</field>
+        <field name="description">Pasivos por impuesto diferido</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">330</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('deferred_tax_liabilities',))][]</field>
+    </record>
+    <record id="bs_other_noncurrent_liabilities" model="mis.report.kpi">
+        <field name="name">other_noncurrent_liabilities</field>
+        <field name="description">Otros pasivos no corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">340</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('other_noncurrent_liabilities',))][]</field>
+    </record>
+    <record id="bs_noncurrent_liabilities" model="mis.report.kpi">
+        <field name="name">noncurrent_liabilities</field>
+        <field name="description">Total pasivos no corrientes</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">350</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">borrowings_noncurrent + provisions_noncurrent + advances_noncurrent + deferred_tax_liabilities + other_noncurrent_liabilities</field>
+    </record>
+    <record id="bs_unclassified_assets" model="mis.report.kpi">
+        <field name="name">unclassified_assets</field>
+        <field name="description">Activos sin clasificar</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">190</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">bale[('account_type', 'like', 'asset%'), ('l10n_co_statement_category', '=', False)][]</field>
+    </record>
+    <record id="bs_assets" model="mis.report.kpi">
+        <field name="name">assets</field>
+        <field name="description">Total activos</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">200</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">current_assets + noncurrent_assets + unclassified_assets</field>
+    </record>
+    <record id="bs_unclassified_liabilities" model="mis.report.kpi">
+        <field name="name">unclassified_liabilities</field>
+        <field name="description">Pasivos sin clasificar</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">360</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('account_type', 'like', 'liability%'), ('l10n_co_statement_category', '=', False)][]</field>
+    </record>
+    <record id="bs_liabilities" model="mis.report.kpi">
+        <field name="name">liabilities</field>
+        <field name="description">Total pasivos</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">370</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">current_liabilities + noncurrent_liabilities + unclassified_liabilities</field>
+    </record>
+    <record id="bs_equity_header" model="mis.report.kpi">
+        <field name="name">equity_header</field>
+        <field name="description">Patrimonio</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">380</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">0</field>
+    </record>
+    <record id="bs_capital" model="mis.report.kpi">
+        <field name="name">capital</field>
+        <field name="description">Capital social</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">390</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="bs_capitalization" model="mis.report.kpi">
+        <field name="name">capitalization</field>
+        <field name="description">CapitalizaciÃ³n</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">400</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="bs_reserves" model="mis.report.kpi">
+        <field name="name">reserves</field>
+        <field name="description">Reservas</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">410</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="bs_transition" model="mis.report.kpi">
+        <field name="name">transition</field>
+        <field name="description">Ajustes de adopciÃ³n NIIF</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">420</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="bs_other_equity" model="mis.report.kpi">
+        <field name="name">other_equity</field>
+        <field name="description">Otros componentes del patrimonio</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">430</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('other_equity',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="bs_oci" model="mis.report.kpi">
+        <field name="name">oci</field>
+        <field name="description">Otro resultado integral acumulado</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">440</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="bs_retained" model="mis.report.kpi">
+        <field name="name">retained</field>
+        <field name="description">Ganancias o pÃ©rdidas acumuladas</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">450</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][] + (-balu[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', '=', 'equity_unaffected')][])</field>
+    </record>
+    <record id="bs_result" model="mis.report.kpi">
+        <field name="name">result</field>
+        <field name="description">Resultado del período pendiente de asignar</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">460</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-balp[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -balp[('account_type', '=', 'equity_unaffected')][]</field>
+    </record>
+    <record id="bs_unclassified_equity" model="mis.report.kpi">
+        <field name="name">unclassified_equity</field>
+        <field name="description">Patrimonio sin clasificar</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">470</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-bale[('account_type', '=', 'equity'), ('l10n_co_statement_category', '=', False)][]</field>
+    </record>
+    <record id="bs_equity" model="mis.report.kpi">
+        <field name="name">equity</field>
+        <field name="description">Total patrimonio</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">480</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">capital + capitalization + reserves + transition + other_equity + oci + retained + result + unclassified_equity</field>
+    </record>
+    <record id="bs_liabilities_equity" model="mis.report.kpi">
+        <field name="name">liabilities_equity</field>
+        <field name="description">Total pasivos y patrimonio</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">490</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">liabilities + equity</field>
+    </record>
+    <record id="bs_balance_check" model="mis.report.kpi">
+        <field name="name">balance_check</field>
+        <field name="description">Control: activos menos pasivos y patrimonio</field>
+        <field name="report_id" ref="report_bs" />
+        <field name="sequence">500</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">assets - liabilities_equity</field>
+    </record>
+    <record id="pl_revenue" model="mis.report.kpi">
+        <field name="name">revenue</field>
+        <field name="description">Ingresos de actividades ordinarias</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">10</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-balp[('l10n_co_statement_category', 'in', ('revenue',))][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_cost_of_sales" model="mis.report.kpi">
+        <field name="name">cost_of_sales</field>
+        <field name="description">Costo de ventas</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">20</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">balp[('l10n_co_statement_category', 'in', ('cost_of_sales',))][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_gross_profit" model="mis.report.kpi">
+        <field name="name">gross_profit</field>
+        <field name="description">Ganancia bruta</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">30</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">revenue - cost_of_sales</field>
+    </record>
+    <record id="pl_other_income" model="mis.report.kpi">
+        <field name="name">other_income</field>
+        <field name="description">Otros ingresos</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">40</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-balp[('l10n_co_statement_category', 'in', ('other_income',))][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_selling_expenses" model="mis.report.kpi">
+        <field name="name">selling_expenses</field>
+        <field name="description">Gastos de ventas y distribuciÃ³n</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">50</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">balp[('l10n_co_statement_category', 'in', ('selling_expenses',))][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_administrative_expenses" model="mis.report.kpi">
+        <field name="name">administrative_expenses</field>
+        <field name="description">Gastos de administraciÃ³n</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">60</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">balp[('l10n_co_statement_category', 'in', ('administrative_expenses',))][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_finance_costs" model="mis.report.kpi">
+        <field name="name">finance_costs</field>
+        <field name="description">Gastos financieros</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">70</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">balp[('l10n_co_statement_category', 'in', ('finance_costs',))][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_other_expenses" model="mis.report.kpi">
+        <field name="name">other_expenses</field>
+        <field name="description">Otros gastos</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">80</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">balp[('l10n_co_statement_category', 'in', ('other_expenses',))][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_unclassified_income" model="mis.report.kpi">
+        <field name="name">unclassified_income</field>
+        <field name="description">Ingresos sin clasificar</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">90</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-balp[('account_type', 'like', 'income%'), ('l10n_co_statement_category', '=', False)][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_unclassified_expense" model="mis.report.kpi">
+        <field name="name">unclassified_expense</field>
+        <field name="description">Gastos sin clasificar</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">100</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">balp[('account_type', 'like', 'expense%'), ('l10n_co_statement_category', '=', False)][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_profit_before_tax" model="mis.report.kpi">
+        <field name="name">profit_before_tax</field>
+        <field name="description">Ganancia antes de impuesto a las ganancias</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">110</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">gross_profit + other_income - selling_expenses - administrative_expenses - finance_costs - other_expenses + unclassified_income - unclassified_expense</field>
+    </record>
+    <record id="pl_income_tax" model="mis.report.kpi">
+        <field name="name">income_tax</field>
+        <field name="description">Gasto por impuesto a las ganancias</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">120</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">balp[('l10n_co_statement_category', 'in', ('income_tax',))][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_profit" model="mis.report.kpi">
+        <field name="name">profit</field>
+        <field name="description">Ganancia del período</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">130</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">profit_before_tax - income_tax</field>
+    </record>
+    <record id="pl_oci_reclassifiable" model="mis.report.kpi">
+        <field name="name">oci_reclassifiable</field>
+        <field name="description">ORI susceptible de reclasificaciÃ³n (neto de impuestos)</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">140</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_oci_non_reclassifiable" model="mis.report.kpi">
+        <field name="name">oci_non_reclassifiable</field>
+        <field name="description">ORI no susceptible de reclasificaciÃ³n (neto de impuestos)</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">150</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="expression">-balp[('l10n_co_statement_category', 'in', ('oci_non_reclassifiable',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="pl_oci" model="mis.report.kpi">
+        <field name="name">oci</field>
+        <field name="description">Otro resultado integral</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">160</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">oci_reclassifiable + oci_non_reclassifiable</field>
+    </record>
+    <record id="pl_comprehensive_income" model="mis.report.kpi">
+        <field name="name">comprehensive_income</field>
+        <field name="description">Resultado integral total</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">170</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">profit + oci</field>
+    </record>
+    <record id="pl_profit_check" model="mis.report.kpi">
+        <field name="name">profit_check</field>
+        <field name="description">Control: resultado menos saldo de ingresos y gastos</field>
+        <field name="report_id" ref="report_pl" />
+        <field name="sequence">180</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="expression">profit - (-balp[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][('move_id.l10n_co_equity_movement', '!=', 'closing')])</field>
+    </record>
+</odoo>

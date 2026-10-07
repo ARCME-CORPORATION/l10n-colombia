@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="equity_component_capital" model="mis.report.subkpi">
+        <field name="name">capital</field>
+        <field name="description">Capital social</field>
+        <field name="sequence">0</field>
+        <field name="report_id" ref="report_equity" />
+    </record>
+    <record id="equity_component_reserves" model="mis.report.subkpi">
+        <field name="name">reserves</field>
+        <field name="description">Reservas</field>
+        <field name="sequence">1</field>
+        <field name="report_id" ref="report_equity" />
+    </record>
+    <record id="equity_component_capitalization" model="mis.report.subkpi">
+        <field name="name">capitalization</field>
+        <field name="description">Capitalización</field>
+        <field name="sequence">2</field>
+        <field name="report_id" ref="report_equity" />
+    </record>
+    <record id="equity_component_transition" model="mis.report.subkpi">
+        <field name="name">transition</field>
+        <field name="description">Adopción NIIF</field>
+        <field name="sequence">3</field>
+        <field name="report_id" ref="report_equity" />
+    </record>
+    <record id="equity_component_retained" model="mis.report.subkpi">
+        <field name="name">retained</field>
+        <field name="description">Ganancias acumuladas</field>
+        <field name="sequence">4</field>
+        <field name="report_id" ref="report_equity" />
+    </record>
+    <record id="equity_component_result" model="mis.report.subkpi">
+        <field name="name">result</field>
+        <field name="description">Resultado del período</field>
+        <field name="sequence">5</field>
+        <field name="report_id" ref="report_equity" />
+    </record>
+    <record id="equity_component_oci" model="mis.report.subkpi">
+        <field name="name">oci</field>
+        <field name="description">ORI acumulado</field>
+        <field name="sequence">6</field>
+        <field name="report_id" ref="report_equity" />
+    </record>
+    <record id="equity_component_other_equity" model="mis.report.subkpi">
+        <field name="name">other_equity</field>
+        <field name="description">Otro patrimonio / sin clasificar</field>
+        <field name="sequence">7</field>
+        <field name="report_id" ref="report_equity" />
+    </record>
+    <record id="equity_component_total" model="mis.report.subkpi">
+        <field name="name">total</field>
+        <field name="description">Total</field>
+        <field name="sequence">8</field>
+        <field name="report_id" ref="report_equity" />
+    </record>
+    <record id="equity_opening" model="mis.report.kpi">
+        <field name="name">opening</field>
+        <field name="description">Saldo inicial</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">0</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_opening_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_opening" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">-bali[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_opening_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_opening" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">-bali[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_opening_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_opening" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">-bali[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_opening_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_opening" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">-bali[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_opening_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_opening" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">-bali[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][] + (-balu[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', '=', 'equity_unaffected')][])</field>
+    </record>
+    <record id="equity_opening_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_opening" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_opening_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_opening" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">-bali[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_opening_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_opening" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">-bali['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_opening_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_opening" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(-bali[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][]) + (-bali[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][]) + (-bali[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][]) + (-bali[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][]) + (-bali[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][] + (-balu[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', '=', 'equity_unaffected')][])) + (0) + (-bali[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][]) + (-bali['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][])</field>
+    </record>
+    <record id="equity_contribution" model="mis.report.kpi">
+        <field name="name">contribution</field>
+        <field name="description">Aportes de propietarios</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">10</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_contribution_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_contribution" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]</field>
+    </record>
+    <record id="equity_contribution_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_contribution" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]</field>
+    </record>
+    <record id="equity_contribution_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_contribution" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]</field>
+    </record>
+    <record id="equity_contribution_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_contribution" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]</field>
+    </record>
+    <record id="equity_contribution_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_contribution" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]</field>
+    </record>
+    <record id="equity_contribution_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_contribution" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'contribution')]</field>
+    </record>
+    <record id="equity_contribution_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_contribution" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]</field>
+    </record>
+    <record id="equity_contribution_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_contribution" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]</field>
+    </record>
+    <record id="equity_contribution_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_contribution" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]) + (-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]) + (-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]) + (-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]) + (-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]) + (-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'contribution')]) + (-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')]) + (-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'contribution')])</field>
+    </record>
+    <record id="equity_distribution" model="mis.report.kpi">
+        <field name="name">distribution</field>
+        <field name="description">Dividendos y retiros de utilidades</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">20</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_distribution_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_distribution" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]</field>
+    </record>
+    <record id="equity_distribution_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_distribution" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]</field>
+    </record>
+    <record id="equity_distribution_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_distribution" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]</field>
+    </record>
+    <record id="equity_distribution_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_distribution" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]</field>
+    </record>
+    <record id="equity_distribution_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_distribution" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]</field>
+    </record>
+    <record id="equity_distribution_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_distribution" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'distribution')]</field>
+    </record>
+    <record id="equity_distribution_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_distribution" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]</field>
+    </record>
+    <record id="equity_distribution_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_distribution" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]</field>
+    </record>
+    <record id="equity_distribution_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_distribution" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]) + (-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]) + (-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]) + (-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]) + (-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]) + (-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'distribution')]) + (-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')]) + (-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'distribution')])</field>
+    </record>
+    <record id="equity_transfer" model="mis.report.kpi">
+        <field name="name">transfer</field>
+        <field name="description">Transferencias entre componentes</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">30</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_transfer_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_transfer" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]</field>
+    </record>
+    <record id="equity_transfer_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_transfer" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]</field>
+    </record>
+    <record id="equity_transfer_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_transfer" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]</field>
+    </record>
+    <record id="equity_transfer_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_transfer" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]</field>
+    </record>
+    <record id="equity_transfer_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_transfer" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]</field>
+    </record>
+    <record id="equity_transfer_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_transfer" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'transfer')]</field>
+    </record>
+    <record id="equity_transfer_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_transfer" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]</field>
+    </record>
+    <record id="equity_transfer_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_transfer" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]</field>
+    </record>
+    <record id="equity_transfer_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_transfer" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]) + (-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]) + (-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]) + (-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]) + (-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]) + (-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'transfer')]) + (-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')]) + (-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'transfer')])</field>
+    </record>
+    <record id="equity_correction" model="mis.report.kpi">
+        <field name="name">correction</field>
+        <field name="description">Correcciones y cambios de políticas</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">40</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_correction_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_correction" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]</field>
+    </record>
+    <record id="equity_correction_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_correction" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]</field>
+    </record>
+    <record id="equity_correction_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_correction" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]</field>
+    </record>
+    <record id="equity_correction_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_correction" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]</field>
+    </record>
+    <record id="equity_correction_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_correction" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]</field>
+    </record>
+    <record id="equity_correction_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_correction" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'correction')]</field>
+    </record>
+    <record id="equity_correction_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_correction" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]</field>
+    </record>
+    <record id="equity_correction_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_correction" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]</field>
+    </record>
+    <record id="equity_correction_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_correction" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]) + (-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]) + (-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]) + (-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]) + (-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]) + (-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'correction')]) + (-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')]) + (-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'correction')])</field>
+    </record>
+    <record id="equity_profit" model="mis.report.kpi">
+        <field name="name">profit</field>
+        <field name="description">Ganancia del período</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">50</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_profit_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_profit" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_profit_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_profit" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_profit_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_profit" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_profit_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_profit" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_profit_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_profit" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_profit_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_profit" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">-balp[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][('move_id.l10n_co_equity_movement', '!=', 'closing')]</field>
+    </record>
+    <record id="equity_profit_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_profit" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_profit_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_profit" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_profit_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_profit" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(0) + (0) + (0) + (0) + (0) + (-balp[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][('move_id.l10n_co_equity_movement', '!=', 'closing')]) + (0) + (0)</field>
+    </record>
+    <record id="equity_oci" model="mis.report.kpi">
+        <field name="name">oci</field>
+        <field name="description">Otro resultado integral</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">60</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_oci_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_oci" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_oci_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_oci" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_oci_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_oci" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_oci_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_oci" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_oci_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_oci" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_oci_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_oci" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_oci_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_oci" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]</field>
+    </record>
+    <record id="equity_oci_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_oci" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_oci_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_oci" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(0) + (0) + (0) + (0) + (0) + (0) + (-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]) + (0)</field>
+    </record>
+    <record id="equity_closing" model="mis.report.kpi">
+        <field name="name">closing</field>
+        <field name="description">Cierre y asignación de resultados</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">70</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_closing_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_closing" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]</field>
+    </record>
+    <record id="equity_closing_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_closing" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]</field>
+    </record>
+    <record id="equity_closing_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_closing" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]</field>
+    </record>
+    <record id="equity_closing_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_closing" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]</field>
+    </record>
+    <record id="equity_closing_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_closing" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]</field>
+    </record>
+    <record id="equity_closing_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_closing" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'closing')] -balp[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][('move_id.l10n_co_equity_movement', '=', 'closing')]</field>
+    </record>
+    <record id="equity_closing_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_closing" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]</field>
+    </record>
+    <record id="equity_closing_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_closing" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]</field>
+    </record>
+    <record id="equity_closing_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_closing" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]) + (-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]) + (-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]) + (-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]) + (-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]) + (-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'closing')] -balp[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][('move_id.l10n_co_equity_movement', '=', 'closing')]) + (-balp[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')]) + (-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'closing')])</field>
+    </record>
+    <record id="equity_other" model="mis.report.kpi">
+        <field name="name">other</field>
+        <field name="description">Otros movimientos</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">80</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_details" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_other_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_other" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]</field>
+    </record>
+    <record id="equity_other_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_other" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]</field>
+    </record>
+    <record id="equity_other_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_other" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]</field>
+    </record>
+    <record id="equity_other_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_other" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]</field>
+    </record>
+    <record id="equity_other_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_other" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]</field>
+    </record>
+    <record id="equity_other_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_other" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'other')]</field>
+    </record>
+    <record id="equity_other_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_other" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">0</field>
+    </record>
+    <record id="equity_other_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_other" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]</field>
+    </record>
+    <record id="equity_other_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_other" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(-balp[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]) + (-balp[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]) + (-balp[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]) + (-balp[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]) + (-balp[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')]) + (-balp[('account_type', '=', 'equity_unaffected')][('move_id.l10n_co_equity_movement', '=', 'other')]) + (0) + (-balp['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][('move_id.l10n_co_equity_movement', '=', 'other')])</field>
+    </record>
+    <record id="equity_ending" model="mis.report.kpi">
+        <field name="name">ending</field>
+        <field name="description">Saldo final</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">90</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_ending_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_ending" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">-bale[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_ending_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_ending" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">-bale[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_ending_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_ending" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">-bale[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_ending_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_ending" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">-bale[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_ending_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_ending" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">-bale[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][] + (-balu[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', '=', 'equity_unaffected')][])</field>
+    </record>
+    <record id="equity_ending_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_ending" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">-balp[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -balp[('account_type', '=', 'equity_unaffected')][]</field>
+    </record>
+    <record id="equity_ending_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_ending" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">-bale[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_ending_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_ending" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">-bale['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][]</field>
+    </record>
+    <record id="equity_ending_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_ending" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(-bale[('l10n_co_statement_category', 'in', ('capital',)), ('account_type', '=', 'equity')][]) + (-bale[('l10n_co_statement_category', 'in', ('reserves',)), ('account_type', '=', 'equity')][]) + (-bale[('l10n_co_statement_category', 'in', ('capitalization',)), ('account_type', '=', 'equity')][]) + (-bale[('l10n_co_statement_category', 'in', ('transition',)), ('account_type', '=', 'equity')][]) + (-bale[('l10n_co_statement_category', 'in', ('retained',)), ('account_type', '=', 'equity')][] + (-balu[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -bali[('account_type', '=', 'equity_unaffected')][])) + (-balp[('account_type', 'in', ('income', 'income_other', 'expense', 'expense_direct_cost', 'expense_depreciation'))][] -balp[('account_type', '=', 'equity_unaffected')][]) + (-bale[('l10n_co_statement_category', 'in', ('oci_reclassifiable', 'oci_non_reclassifiable')), ('account_type', '=', 'equity')][]) + (-bale['|', ('l10n_co_statement_category', '=', 'other_equity'), ('l10n_co_statement_category', '=', False), ('account_type', '=', 'equity')][])</field>
+    </record>
+    <record id="equity_reconciliation" model="mis.report.kpi">
+        <field name="name">reconciliation</field>
+        <field name="description">Control: saldo final menos saldo inicial y movimientos</field>
+        <field name="report_id" ref="report_equity" />
+        <field name="sequence">100</field>
+        <field name="type">num</field>
+        <field name="compare_method">diff</field>
+        <field name="accumulation_method">none</field>
+        <field name="style_id" ref="mis_template_financial_report.style_header" />
+        <field name="multi" eval="True" />
+    </record>
+    <record id="equity_reconciliation_capital_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_reconciliation" />
+        <field name="subkpi_id" ref="equity_component_capital" />
+        <field name="name">ending.capital - opening.capital - (contribution.capital + distribution.capital + transfer.capital + correction.capital + profit.capital + oci.capital + closing.capital + other.capital)</field>
+    </record>
+    <record id="equity_reconciliation_reserves_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_reconciliation" />
+        <field name="subkpi_id" ref="equity_component_reserves" />
+        <field name="name">ending.reserves - opening.reserves - (contribution.reserves + distribution.reserves + transfer.reserves + correction.reserves + profit.reserves + oci.reserves + closing.reserves + other.reserves)</field>
+    </record>
+    <record id="equity_reconciliation_capitalization_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_reconciliation" />
+        <field name="subkpi_id" ref="equity_component_capitalization" />
+        <field name="name">ending.capitalization - opening.capitalization - (contribution.capitalization + distribution.capitalization + transfer.capitalization + correction.capitalization + profit.capitalization + oci.capitalization + closing.capitalization + other.capitalization)</field>
+    </record>
+    <record id="equity_reconciliation_transition_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_reconciliation" />
+        <field name="subkpi_id" ref="equity_component_transition" />
+        <field name="name">ending.transition - opening.transition - (contribution.transition + distribution.transition + transfer.transition + correction.transition + profit.transition + oci.transition + closing.transition + other.transition)</field>
+    </record>
+    <record id="equity_reconciliation_retained_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_reconciliation" />
+        <field name="subkpi_id" ref="equity_component_retained" />
+        <field name="name">ending.retained - opening.retained - (contribution.retained + distribution.retained + transfer.retained + correction.retained + profit.retained + oci.retained + closing.retained + other.retained)</field>
+    </record>
+    <record id="equity_reconciliation_result_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_reconciliation" />
+        <field name="subkpi_id" ref="equity_component_result" />
+        <field name="name">ending.result - opening.result - (contribution.result + distribution.result + transfer.result + correction.result + profit.result + oci.result + closing.result + other.result)</field>
+    </record>
+    <record id="equity_reconciliation_oci_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_reconciliation" />
+        <field name="subkpi_id" ref="equity_component_oci" />
+        <field name="name">ending.oci - opening.oci - (contribution.oci + distribution.oci + transfer.oci + correction.oci + profit.oci + oci.oci + closing.oci + other.oci)</field>
+    </record>
+    <record id="equity_reconciliation_other_equity_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_reconciliation" />
+        <field name="subkpi_id" ref="equity_component_other_equity" />
+        <field name="name">ending.other_equity - opening.other_equity - (contribution.other_equity + distribution.other_equity + transfer.other_equity + correction.other_equity + profit.other_equity + oci.other_equity + closing.other_equity + other.other_equity)</field>
+    </record>
+    <record id="equity_reconciliation_total_expression" model="mis.report.kpi.expression">
+        <field name="kpi_id" ref="equity_reconciliation" />
+        <field name="subkpi_id" ref="equity_component_total" />
+        <field name="name">(ending.capital - opening.capital - (contribution.capital + distribution.capital + transfer.capital + correction.capital + profit.capital + oci.capital + closing.capital + other.capital)) + (ending.reserves - opening.reserves - (contribution.reserves + distribution.reserves + transfer.reserves + correction.reserves + profit.reserves + oci.reserves + closing.reserves + other.reserves)) + (ending.capitalization - opening.capitalization - (contribution.capitalization + distribution.capitalization + transfer.capitalization + correction.capitalization + profit.capitalization + oci.capitalization + closing.capitalization + other.capitalization)) + (ending.transition - opening.transition - (contribution.transition + distribution.transition + transfer.transition + correction.transition + profit.transition + oci.transition + closing.transition + other.transition)) + (ending.retained - opening.retained - (contribution.retained + distribution.retained + transfer.retained + correction.retained + profit.retained + oci.retained + closing.retained + other.retained)) + (ending.result - opening.result - (contribution.result + distribution.result + transfer.result + correction.result + profit.result + oci.result + closing.result + other.result)) + (ending.oci - opening.oci - (contribution.oci + distribution.oci + transfer.oci + correction.oci + profit.oci + oci.oci + closing.oci + other.oci)) + (ending.other_equity - opening.other_equity - (contribution.other_equity + distribution.other_equity + transfer.other_equity + correction.other_equity + profit.other_equity + oci.other_equity + closing.other_equity + other.other_equity))</field>
+    </record>
+</odoo>
