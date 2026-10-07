@@ -5,6 +5,7 @@
 Checks the shipped XML against a balanced reference ledger. This small adapter
 supplies balances to formulas; it does not replace integration tests of OCA's ORM.
 """
+
 import ast
 import re
 import unittest

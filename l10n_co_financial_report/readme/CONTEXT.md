@@ -5,7 +5,8 @@ places the Colombian presentation rules in the localization repository. The
 broader name allows later extension beyond these three statements. The OCA
 reference `account_financial_report` provides ledger/trial-balance reporting,
 while `mis_template_financial_report` provides configurable balance and result
-templates; this module uses the latter rather than creating another report engine.
+templates; this module evaluates the latter on the server and uses the native export
+assistant from Account Financial Reports.
 
 The source PDF was reviewed as an example of presentation: account grouping,
 profit subtotals and an equity-component matrix. Its figures were checked
@@ -28,5 +29,10 @@ Sources consulted on 7 October 2026:
 
 The model adds editable, stored classifications to existing accounting records.
 No new persistent accounting model, elevated access, SQL bypass or separate
-amount-computation engine is introduced. The assistant creates ordinary MIS
-instances; calculation continues to use OCA's ORM and record rules.
+amount-computation engine is introduced. The assistant renders native HTML/PDF/XLSX reports; calculation continues to
+use OCA's ORM and record rules. Existing MIS instances are preserved.
+
+Version 18.0.1.1.1 adds the Colombia menu and individual report assistants. It
+avoids the MIS widget lifecycle that attempted to read an invalid instance ID,
+and repairs original incorrectly encoded labels without replacing custom labels.
+The migration also updates the parent menu's Spanish translation.

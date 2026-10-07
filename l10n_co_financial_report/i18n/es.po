@@ -41,7 +41,6 @@ msgid "Date To"
 msgstr "Fecha final"
 
 #. module: l10n_co_financial_report
-#: model:ir.ui.menu,name:l10n_co_financial_report.financial_report_menu
 #: model:ir.actions.act_window,name:l10n_co_financial_report.financial_report_wizard_action
 #: model_terms:ir.ui.view,arch_db:l10n_co_financial_report.financial_report_wizard_form
 msgid "Colombian Financial Statements"
@@ -61,3 +60,8 @@ msgstr "Cancelar"
 #: model_terms:ir.ui.view,arch_db:l10n_co_financial_report.financial_report_wizard_form
 msgid "Review account categories and equity movements before issuing statements."
 msgstr "Revise las categorías de cuentas y los movimientos del patrimonio antes de emitir los estados financieros."
+
+#. module: l10n_co_financial_report
+#: model:ir.ui.menu,name:l10n_co_financial_report.financial_report_menu
+msgid "Colombia"
+msgstr "Colombia"

@@ -1,7 +1,7 @@
 Add the 18.0 branches of these OCA repositories to the Odoo addons path:
 
 - `l10n-colombia` (this module)
-- `account-financial-reporting` (`mis_template_financial_report`)
+- `account-financial-reporting` (`account_financial_report`, `mis_template_financial_report`)
 - `mis-builder` (`mis_builder`)
 - `reporting-engine` (`report_xlsx`)
 - `server-ux` (`date_range`)

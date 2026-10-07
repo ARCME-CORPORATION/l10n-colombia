@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="statement_bs"><t t-call="l10n_co_financial_report.financial_statement" /></template>
+    <template id="statement_pl"><t t-call="l10n_co_financial_report.financial_statement" /></template>
+    <template id="statement_equity"><t t-call="l10n_co_financial_report.financial_statement" /></template>
+    <template id="html_container">
+        <html>
+            <head><meta charset="utf-8" /><title t-out="statement['title']" /></head>
+            <body style="font-family: Arial, sans-serif; margin: 0;">
+                <main><t t-out="0" /></main>
+            </body>
+        </html>
+    </template>
+    <template id="internal_layout">
+        <div class="article o_account_financial_reports_page"><t t-out="0" /></div>
+        <div class="footer" style="font-family: Arial, sans-serif; font-size: 8px;">
+            <table style="width: 100%;"><tr>
+                <td t-out="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')" />
+                <td style="text-align: right;"><span class="page" /> / <span class="topage" /></td>
+            </tr></table>
+        </div>
+    </template>
+    <template id="financial_statement">
+        <t t-call="l10n_co_financial_report.html_container">
+            <t t-foreach="statement['sections']" t-as="section">
+                <t t-call="l10n_co_financial_report.internal_layout">
+                    <div class="page" style="page-break-after: always;">
+                        <style>
+                            .co-table { width: 100%; border-collapse: collapse; font-size: 10px; table-layout: fixed; }
+                            .co-table th, .co-table td { padding: 2px 4px; vertical-align: top; overflow-wrap: break-word; }
+                            .co-table th { background: #e8edf2; border-bottom: 1px solid #8090a0; }
+                            .co-table .co-total { font-weight: bold; border-top: 1px solid #8090a0; }
+                            .co-table .co-header { font-weight: bold; background: #f3f5f7; }
+                            .co-equity { font-size: 8.5px; }
+                            .co-number { text-align: right; white-space: nowrap; }
+                            .co-title { text-align: center; margin-bottom: 12px; }
+                        </style>
+                        <div class="co-title">
+                            <h3 style="margin: 0;" t-out="statement['company'].name" />
+                            <div>NIT: <span t-out="statement['company'].vat or ''" /></div>
+                            <h4 style="margin: 5px 0;" t-out="statement['title']" />
+                            <div t-if="not statement['equity']">
+                                <t t-if="docs.statement_type == 'bs'">Al <span t-out="statement['date_to']" /></t>
+                                <t t-else="">Del <span t-out="statement['date_from']" /> al <span t-out="statement['date_to']" /></t>
+                            </div>
+                            <div t-if="section['period']" t-out="section['period']" />
+                            <div>Cifras expresadas en <span t-out="statement['currency'].name" /></div>
+                            <div t-if="statement['drafts']">Incluye asientos en borrador</div>
+                        </div>
+                        <table t-att-class="'co-table co-equity' if statement['equity'] else 'co-table'">
+                            <colgroup>
+                                <col t-att-style="'width: 27%;' if statement['equity'] else 'width: 58%;'" />
+                                <col t-foreach="section['columns']" t-as="column" t-att-style="'width: ' + str((73 if statement['equity'] else 42) / len(section['columns'])) + '%;'" />
+                            </colgroup>
+                            <thead><tr><th>Concepto</th><th class="co-number" t-foreach="section['columns']" t-as="column" t-out="column" style="white-space: normal;" /></tr></thead>
+                            <tbody>
+                                <tr t-foreach="section['rows']" t-as="row" t-att-class="'co-header' if row['header'] else ('co-total' if row['total'] else '')">
+                                    <td><span t-out="row['name']" t-att-res-model="'account.move.line' if row['domain'] and not row['header'] else None" t-att-domain="row['domain'] if row['domain'] and not row['header'] else None" title="Ver movimientos contables" /></td>
+                                    <td class="co-number" t-foreach="row['formatted']" t-as="amount"><span t-if="not row['header']" t-out="amount" t-att-res-model="'account.move.line' if row['domains'][amount_index] else None" t-att-domain="row['domains'][amount_index] or None" title="Ver movimientos contables" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

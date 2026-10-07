@@ -1,25 +1,49 @@
-Open **Accounting > Reporting > Colombian Financial Statements**, choose the
-company and period and click **Create reports**. The assistant creates three MIS
-instances using posted entries and the company's currency. Optionally it adds the
-same date range in the preceding year (29 February maps to 28 February).
+Open **Invoicing / Accounting > Reporting > Colombia** and select:
 
-Open each instance to preview, drill down or export PDF/Excel using MIS Builder.
-Situation and result reports use portrait orientation; the equity matrix uses
-landscape. For wide comparisons, export XLSX or use separate PDF instances for
-each year; the equity matrix has nine component columns per period.
+- **Estado de Situación Financiera**
+- **Estado de Resultado Integral**
+- **Estado de Cambios en el Patrimonio**
+
+Each menu opens an Account Financial Reports assistant with company, start date,
+end date, previous-year comparison and posted/all entry options. Click
+**Visualizar**, **Descargar PDF** or **Descargar Excel**. The reports use native
+QWeb HTML/PDF and OCA `report_xlsx`; the browser does not load a MIS widget.
+MIS Builder evaluates the financial formulas on the server without creating
+persistent report instances. Previously created MIS instances remain available.
+
+The equity PDF uses landscape orientation and a separate page for each period.
+Its Excel workbook uses one sheet per period. Situation and result reports show
+current and comparative amounts alongside each other. Exports use the company's
+currency and decimal precision. Draft entries are explicitly identified when
+included.
+
+Equity opens without previous-year comparison, so it displays one period by
+default. Enable comparison to display a second section explicitly labelled as
+the previous year.
+
+In **Visualizar**, click a concept to open its contributing journal items, or an
+amount to restrict them to that column's period and equity component. Opening
+balances include earlier items; closing balances include accumulated items.
+Computed totals trace the accounting terms of their formulas. The list follows
+the company's access rules and the posted/all filter. Amounts derived from
+subtractions show contributing items, whose unsigned union need not sum to the
+displayed result. PDF and Excel remain ordinary exports.
+
+Use **Mapear cuentas** to open the company's chart of accounts. Each account's
+**Categoría de estados financieros colombianos** selects its reporting concept;
+edit this column in the account list or the account form. Defaults
+come from the Odoo account type, not Colombian account-code prefixes. Review
+the defaults before issuing reports. For equity changes, classify each journal
+entry with its **Movimiento de patrimonio colombiano**.
+
+Use **Configurar conceptos** to edit the selected MIS report template: labels,
+order and formulas determine the displayed rows and their account filters.
+Changing formulas also changes the journal-item links. The category selection
+on accounts is predefined; adding new category choices requires module code,
+while template formulas can also select specific accounts or other fields.
 
 The ending balance uses the selected end date. Income and movement rows use the
 selected date range. Unallocated profit before the start date is carried into
-accumulated earnings, including earlier months of the fiscal year. Profit already
-assigned through Odoo's `equity_unaffected` account is deducted from unallocated
-profit to avoid counting it twice. Off-balance-sheet accounts are excluded.
-
-**Control: activos menos pasivos y patrimonio**, **Control: resultado menos saldo
-de ingresos y gastos**, and all cells in the equity reconciliation must be zero.
-Unclassified account rows must be zero and their classifications reviewed, even
-if balances offset. The assistant refuses charts with unclassified on-balance
-accounts, but templates can still be used directly in MIS Builder.
-
-Each instance is limited to one selected company. MIS Builder handles access
-rights and record rules. Do not use multi-company mode for statutory individual
-statements or companies with different fiscal calendars.
+accumulated earnings, including earlier months of the fiscal year. Assigned
+results are deducted to avoid counting them twice. Off-balance accounts are
+excluded. Review unclassified rows and reconciliation controls before issuing.

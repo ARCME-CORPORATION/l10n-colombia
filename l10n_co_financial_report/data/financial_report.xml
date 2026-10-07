@@ -464,7 +464,7 @@
     </record>
     <record id="bs_capitalization" model="mis.report.kpi">
         <field name="name">capitalization</field>
-        <field name="description">CapitalizaciÃ³n</field>
+        <field name="description">Capitalización</field>
         <field name="report_id" ref="report_bs" />
         <field name="sequence">400</field>
         <field name="type">num</field>
@@ -486,7 +486,7 @@
     </record>
     <record id="bs_transition" model="mis.report.kpi">
         <field name="name">transition</field>
-        <field name="description">Ajustes de adopciÃ³n NIIF</field>
+        <field name="description">Ajustes de adopción NIIF</field>
         <field name="report_id" ref="report_bs" />
         <field name="sequence">420</field>
         <field name="type">num</field>
@@ -519,7 +519,7 @@
     </record>
     <record id="bs_retained" model="mis.report.kpi">
         <field name="name">retained</field>
-        <field name="description">Ganancias o pÃ©rdidas acumuladas</field>
+        <field name="description">Ganancias o pérdidas acumuladas</field>
         <field name="report_id" ref="report_bs" />
         <field name="sequence">450</field>
         <field name="type">num</field>
@@ -629,7 +629,7 @@
     </record>
     <record id="pl_selling_expenses" model="mis.report.kpi">
         <field name="name">selling_expenses</field>
-        <field name="description">Gastos de ventas y distribuciÃ³n</field>
+        <field name="description">Gastos de ventas y distribución</field>
         <field name="report_id" ref="report_pl" />
         <field name="sequence">50</field>
         <field name="type">num</field>
@@ -640,7 +640,7 @@
     </record>
     <record id="pl_administrative_expenses" model="mis.report.kpi">
         <field name="name">administrative_expenses</field>
-        <field name="description">Gastos de administraciÃ³n</field>
+        <field name="description">Gastos de administración</field>
         <field name="report_id" ref="report_pl" />
         <field name="sequence">60</field>
         <field name="type">num</field>
@@ -728,7 +728,7 @@
     </record>
     <record id="pl_oci_reclassifiable" model="mis.report.kpi">
         <field name="name">oci_reclassifiable</field>
-        <field name="description">ORI susceptible de reclasificaciÃ³n (neto de impuestos)</field>
+        <field name="description">ORI susceptible de reclasificación (neto de impuestos)</field>
         <field name="report_id" ref="report_pl" />
         <field name="sequence">140</field>
         <field name="type">num</field>
@@ -739,7 +739,7 @@
     </record>
     <record id="pl_oci_non_reclassifiable" model="mis.report.kpi">
         <field name="name">oci_non_reclassifiable</field>
-        <field name="description">ORI no susceptible de reclasificaciÃ³n (neto de impuestos)</field>
+        <field name="description">ORI no susceptible de reclasificación (neto de impuestos)</field>
         <field name="report_id" ref="report_pl" />
         <field name="sequence">150</field>
         <field name="type">num</field>

@@ -1,4 +1,4 @@
-- Verify installation, rendering and accounting behavior in a real Odoo 18 database before production use.
+- Extend validation to representative production charts and disclosure policies.
 - Add note references and configurable signatory blocks.
 - Provide a company-specific mapping model for shared accounts with different reporting policies.
 - Add finer detail for individual ORI items and accounting policy changes.

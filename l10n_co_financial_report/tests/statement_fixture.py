@@ -1,6 +1,7 @@
 # Copyright 2026 Juan Arcos
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 """Anonymous accounting fixture, amounts in COP."""
+
 CHART = {
     "cash": ("asset_cash", "cash"),
     "receivables": ("asset_receivable", "trade_receivables"),

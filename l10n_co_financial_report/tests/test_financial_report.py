@@ -205,3 +205,140 @@ class TestFinancialReport(TransactionCase):
         )
         with self.assertRaises(ValidationError):
             wizard.action_create_reports()
+
+    def test_native_report_buttons_and_data(self):
+        for code in ("bs", "pl", "equity"):
+            wizard = self.env["l10n_co.financial.report.wizard"].create(
+                {
+                    "company_id": self.company.id,
+                    "statement_type": code,
+                    "date_from": "2025-01-01",
+                    "date_to": "2025-12-31",
+                }
+            )
+            statement = wizard._get_statement_data()
+            self.assertEqual(statement["company"], self.company)
+            self.assertEqual(len(statement["sections"]), 2 if code == "equity" else 1)
+            for method, report_type in (
+                ("button_export_html", "qweb-html"),
+                ("button_export_pdf", "qweb-pdf"),
+                ("button_export_xlsx", "xlsx"),
+            ):
+                action = getattr(wizard, method)()
+                self.assertEqual(action["type"], "ir.actions.report")
+                self.assertEqual(action["report_type"], report_type)
+                self.assertEqual(action["data"]["wizard_id"], wizard.id)
+
+    def test_native_html_and_xlsx_rendering(self):
+        from io import BytesIO
+        from zipfile import ZipFile
+
+        for code in ("bs", "pl", "equity"):
+            wizard = self.env["l10n_co.financial.report.wizard"].create(
+                {
+                    "company_id": self.company.id,
+                    "statement_type": code,
+                    "date_from": "2025-01-01",
+                    "date_to": "2025-12-31",
+                }
+            )
+            data = wizard._prepare_report_data()
+            service = self.env["ir.actions.report"]
+            html, _ = service._render_qweb_html(
+                f"l10n_co_financial_report.action_{code}_html", wizard.ids, data=data
+            )
+            self.assertIn(b"co-table", html)
+            self.assertIn(b'res-model="account.move.line"', html)
+            self.assertNotIn(b"mis_report_widget", html)
+            xlsx, _ = service._render_xlsx(
+                f"l10n_co_financial_report.action_{code}_xlsx", wizard.ids, data=data
+            )
+            with ZipFile(BytesIO(xlsx)) as workbook:
+                self.assertIn("xl/workbook.xml", workbook.namelist())
+
+    def test_each_report_has_a_menu(self):
+        parent = self.env.ref("l10n_co_financial_report.financial_report_menu")
+        self.assertFalse(parent.action)
+        for code in ("bs", "pl", "equity"):
+            menu = self.env.ref(f"l10n_co_financial_report.menu_{code}")
+            self.assertEqual(menu.parent_id, parent)
+            self.assertEqual(menu.action.res_model, "l10n_co.financial.report.wizard")
+
+    def test_equity_menu_defaults_to_one_period(self):
+        from odoo.tools.safe_eval import safe_eval
+
+        action = self.env.ref("l10n_co_financial_report.wizard_action_equity")
+        wizard = (
+            self.env["l10n_co.financial.report.wizard"]
+            .with_context(**safe_eval(action.context))
+            .create({"date_from": "2025-01-01", "date_to": "2025-12-31"})
+        )
+        self.assertFalse(wizard.comparison)
+        self.assertEqual(len(wizard._get_statement_data()["sections"]), 1)
+        wizard.comparison = True
+        sections = wizard._get_statement_data()["sections"]
+        self.assertEqual(len(sections), 2)
+        self.assertIn("Comparativo del año anterior", sections[1]["period"])
+
+    def test_drilldown_scopes_and_aggregates(self):
+        self._entry([("cash", 999999), ("revenue", -999999)], posted=False)
+        wizard = self.env["l10n_co.financial.report.wizard"].create(
+            {"statement_type": "pl", "date_from": "2025-01-01", "date_to": "2025-12-31"}
+        )
+        rows = {
+            row["code"]: row
+            for row in wizard._get_statement_data()["sections"][0]["rows"]
+        }
+        revenue = self.env["account.move.line"].search(rows["revenue"]["domains"][0])
+        self.assertTrue(revenue)
+        self.assertEqual(revenue.account_id, self.accounts["revenue"])
+        self.assertEqual(-sum(revenue.mapped("balance")), rows["revenue"]["amounts"][0])
+        self.assertTrue(all(line.parent_state == "posted" for line in revenue))
+        self.assertTrue(all(line.company_id == self.company for line in revenue))
+        self.assertTrue(
+            all(date(2025, 1, 1) <= line.date <= date(2025, 12, 31) for line in revenue)
+        )
+        previous = self.env["account.move.line"].search(rows["revenue"]["domains"][1])
+        self.assertFalse(previous)
+        profit = self.env["account.move.line"].search(rows["profit"]["domains"][0])
+        self.assertEqual(-sum(profit.mapped("balance")), rows["profit"]["amounts"][0])
+        wizard.target_move = "all"
+        rows = {
+            row["code"]: row
+            for row in wizard._get_statement_data()["sections"][0]["rows"]
+        }
+        all_revenue = self.env["account.move.line"].search(
+            rows["revenue"]["domains"][0]
+        )
+        self.assertGreater(len(all_revenue), len(revenue))
+
+    def test_equity_drilldown_by_component_and_movement(self):
+        self._entry([("cash", 500000), ("capital", -500000)], movement="contribution")
+        wizard = self.env["l10n_co.financial.report.wizard"].create(
+            {
+                "statement_type": "equity",
+                "comparison": False,
+                "date_from": "2025-01-01",
+                "date_to": "2025-12-31",
+            }
+        )
+        rows = {
+            row["code"]: row
+            for row in wizard._get_statement_data()["sections"][0]["rows"]
+        }
+        template = self.env.ref("l10n_co_financial_report.report_equity")
+        index = template.subkpi_ids.mapped("name").index("capital")
+        lines = self.env["account.move.line"].search(
+            rows["contribution"]["domains"][index]
+        )
+        self.assertEqual(-sum(lines.mapped("balance")), 500000)
+        self.assertEqual(lines.account_id, self.accounts["capital"])
+        self.assertTrue(
+            all(
+                line.move_id.l10n_co_equity_movement == "contribution" for line in lines
+            )
+        )
+        opening = self.env["account.move.line"].search(
+            rows["opening"]["domains"][index]
+        )
+        self.assertTrue(all(line.date < date(2025, 1, 1) for line in opening))

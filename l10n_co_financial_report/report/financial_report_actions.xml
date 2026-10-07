@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="paperformat_portrait" model="report.paperformat">
+        <field name="name">Colombia - Portrait</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_spacing">5</field>
+        <field name="dpi">90</field>
+    </record>
+    <record id="paperformat_landscape" model="report.paperformat">
+        <field name="name">Colombia - Landscape</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_spacing">5</field>
+        <field name="dpi">90</field>
+    </record>
+    <record id="action_bs_html" model="ir.actions.report">
+        <field name="name">Estado de Situación Financiera</field>
+        <field name="model">l10n_co.financial.report.wizard</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">l10n_co_financial_report.statement_bs</field>
+        <field name="report_file">l10n_co_financial_report.statement_bs</field>
+    </record>
+    <record id="action_bs_pdf" model="ir.actions.report">
+        <field name="name">Estado de Situación Financiera</field>
+        <field name="model">l10n_co.financial.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_co_financial_report.statement_bs</field>
+        <field name="report_file">l10n_co_financial_report.statement_bs</field>
+        <field name="paperformat_id" ref="paperformat_portrait" />
+    </record>
+    <record id="action_bs_xlsx" model="ir.actions.report">
+        <field name="name">Estado de Situación Financiera</field>
+        <field name="model">l10n_co.financial.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">l10n_co_financial_report.statement_xlsx</field>
+        <field name="report_file">l10n_co_financial_report.statement_xlsx</field>
+    </record>
+    <record id="action_pl_html" model="ir.actions.report">
+        <field name="name">Estado de Resultado Integral</field>
+        <field name="model">l10n_co.financial.report.wizard</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">l10n_co_financial_report.statement_pl</field>
+        <field name="report_file">l10n_co_financial_report.statement_pl</field>
+    </record>
+    <record id="action_pl_pdf" model="ir.actions.report">
+        <field name="name">Estado de Resultado Integral</field>
+        <field name="model">l10n_co.financial.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_co_financial_report.statement_pl</field>
+        <field name="report_file">l10n_co_financial_report.statement_pl</field>
+        <field name="paperformat_id" ref="paperformat_portrait" />
+    </record>
+    <record id="action_pl_xlsx" model="ir.actions.report">
+        <field name="name">Estado de Resultado Integral</field>
+        <field name="model">l10n_co.financial.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">l10n_co_financial_report.statement_xlsx</field>
+        <field name="report_file">l10n_co_financial_report.statement_xlsx</field>
+    </record>
+    <record id="action_equity_html" model="ir.actions.report">
+        <field name="name">Estado de Cambios en el Patrimonio</field>
+        <field name="model">l10n_co.financial.report.wizard</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">l10n_co_financial_report.statement_equity</field>
+        <field name="report_file">l10n_co_financial_report.statement_equity</field>
+    </record>
+    <record id="action_equity_pdf" model="ir.actions.report">
+        <field name="name">Estado de Cambios en el Patrimonio</field>
+        <field name="model">l10n_co.financial.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_co_financial_report.statement_equity</field>
+        <field name="report_file">l10n_co_financial_report.statement_equity</field>
+        <field name="paperformat_id" ref="paperformat_landscape" />
+    </record>
+    <record id="action_equity_xlsx" model="ir.actions.report">
+        <field name="name">Estado de Cambios en el Patrimonio</field>
+        <field name="model">l10n_co.financial.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">l10n_co_financial_report.statement_xlsx</field>
+        <field name="report_file">l10n_co_financial_report.statement_xlsx</field>
+    </record>
+</odoo>

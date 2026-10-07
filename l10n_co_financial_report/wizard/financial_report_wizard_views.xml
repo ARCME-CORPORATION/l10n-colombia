@@ -4,28 +4,66 @@
         <field name="name">l10n_co.financial.report.wizard.form</field>
         <field name="model">l10n_co.financial.report.wizard</field>
         <field name="arch" type="xml">
-            <form string="Colombian Financial Statements">
+            <form string="Estados financieros colombianos">
                 <group>
-                    <field name="company_id" options="{'no_create': True}" />
-                    <field name="date_from" />
-                    <field name="date_to" />
-                    <field name="comparison" />
+                    <field name="statement_type" string="Estado financiero" />
+                    <field name="company_id" string="Compañía" options="{'no_create': True}" />
+                    <field name="date_from" string="Fecha inicial" />
+                    <field name="date_to" string="Fecha final" />
+                    <field name="comparison" string="Comparar con el año anterior" />
+                    <field name="target_move" string="Asientos" />
                 </group>
-                <p>Review account categories and equity movements before issuing statements.</p>
+                <group string="Configuración">
+                    <button name="action_map_accounts" string="Mapear cuentas" type="object" />
+                    <button name="action_configure_concepts" string="Configurar conceptos" type="object" />
+                </group>
                 <footer>
-                    <button name="action_create_reports" type="object" string="Create reports" class="oe_highlight" />
-                    <button string="Cancel" special="cancel" />
+                    <button name="button_export_html" string="Visualizar" type="object" class="oe_highlight" />
+                    <button name="button_export_pdf" string="Descargar PDF" type="object" />
+                    <button name="button_export_xlsx" string="Descargar Excel" type="object" />
+                    <button string="Cancelar" special="cancel" />
                 </footer>
             </form>
         </field>
     </record>
     <record id="financial_report_wizard_action" model="ir.actions.act_window">
-        <field name="name">Colombian Financial Statements</field>
+        <field name="name">Estados financieros colombianos</field>
         <field name="res_model">l10n_co.financial.report.wizard</field>
         <field name="view_mode">form</field>
+        <field name="view_id" ref="financial_report_wizard_form" />
         <field name="target">new</field>
     </record>
-    <menuitem id="financial_report_menu" name="Colombian Financial Statements"
-        parent="account.menu_finance_reports" action="financial_report_wizard_action"
-        groups="account.group_account_manager" sequence="80" />
+    <record id="financial_report_menu" model="ir.ui.menu">
+        <field name="name">Colombia</field>
+        <field name="parent_id" ref="account.menu_finance_reports" />
+        <field name="action" eval="False" />
+        <field name="sequence">80</field>
+    </record>
+    <record id="wizard_action_bs" model="ir.actions.act_window">
+        <field name="name">Estado de Situación Financiera</field>
+        <field name="res_model">l10n_co.financial.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="financial_report_wizard_form" />
+        <field name="context">{'default_statement_type': 'bs'}</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_bs" name="Estado de Situación Financiera" parent="financial_report_menu" action="wizard_action_bs" groups="account.group_account_manager" sequence="1" />
+    <record id="wizard_action_pl" model="ir.actions.act_window">
+        <field name="name">Estado de Resultado Integral</field>
+        <field name="res_model">l10n_co.financial.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="financial_report_wizard_form" />
+        <field name="context">{'default_statement_type': 'pl'}</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_pl" name="Estado de Resultado Integral" parent="financial_report_menu" action="wizard_action_pl" groups="account.group_account_manager" sequence="2" />
+    <record id="wizard_action_equity" model="ir.actions.act_window">
+        <field name="name">Estado de Cambios en el Patrimonio</field>
+        <field name="res_model">l10n_co.financial.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="financial_report_wizard_form" />
+        <field name="context">{'default_statement_type': 'equity', 'default_comparison': False}</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_equity" name="Estado de Cambios en el Patrimonio" parent="financial_report_menu" action="wizard_action_equity" groups="account.group_account_manager" sequence="3" />
 </odoo>

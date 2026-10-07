@@ -16,7 +16,7 @@
         <field name="inherit_id" ref="account.view_account_list" />
         <field name="arch" type="xml">
             <field name="account_type" position="after">
-                <field name="l10n_co_statement_category" optional="hide" />
+                <field name="l10n_co_statement_category" optional="show" />
             </field>
         </field>
     </record>

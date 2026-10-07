@@ -3,7 +3,7 @@
 3. Set **Colombian equity movement** on miscellaneous journal entries: contributions, distributions, transfers, corrections, result closing or other movements. Mixed entries with different movement types must be split.
 4. Mark result-closing entries as **Cierre de resultados**. Income and expenses in these entries are excluded from the income statement, but retained in the balance sheet and equity reconciliation. Do not exclude closing entries from the MIS instance's global filter.
 5. Map equity accounts for other comprehensive income (ORI) to the reclassifiable or non-reclassifiable category. Include the associated tax effects in these categories so the displayed movements are net of tax. Closing transfers out of ORI must be marked as closing entries; reserve transfers and corrections must have their appropriate movement type.
-6. Duplicate the templates before changing labels, formulas, grouping, precision or styles. Template data uses `noupdate` to preserve local edits on upgrade. Do not sum snapshots across periods: balance and equity KPIs have accumulation disabled.
+6. Use **Configurar conceptos** in the assistant to edit the built-in template's labels, order and formulas. Template data uses `noupdate` to preserve local edits on upgrade. These assistants use the three built-in templates; duplicate templates can be used separately in MIS instances. Do not sum snapshots across periods: balance and equity KPIs have accumulation disabled.
 
 There is no automatic maturity analysis, NIIF measurement adjustment, comparative
 restatement or determination of whether an ORI item can be reclassified. The
