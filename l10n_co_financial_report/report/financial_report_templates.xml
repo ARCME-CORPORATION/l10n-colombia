@@ -3,63 +3,45 @@
     <template id="statement_bs"><t t-call="l10n_co_financial_report.financial_statement" /></template>
     <template id="statement_pl"><t t-call="l10n_co_financial_report.financial_statement" /></template>
     <template id="statement_equity"><t t-call="l10n_co_financial_report.financial_statement" /></template>
-    <template id="html_container">
-        <html>
-            <head><meta charset="utf-8" /><title t-out="statement['title']" /></head>
-            <body style="font-family: Arial, sans-serif; margin: 0;">
-                <main><t t-out="0" /></main>
-            </body>
-        </html>
-    </template>
-    <template id="internal_layout">
-        <div class="article o_account_financial_reports_page"><t t-out="0" /></div>
-        <div class="footer" style="font-family: Arial, sans-serif; font-size: 8px;">
-            <table style="width: 100%;"><tr>
-                <td t-out="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')" />
-                <td style="text-align: right;"><span class="page" /> / <span class="topage" /></td>
-            </tr></table>
-        </div>
-    </template>
     <template id="financial_statement">
-        <t t-call="l10n_co_financial_report.html_container">
+        <t t-call="account_financial_report.html_container">
+            <t t-set="title" t-value="statement['title'] + ' - ' + statement['company'].name + ' - ' + statement['currency'].name" />
             <t t-foreach="statement['sections']" t-as="section">
-                <t t-call="l10n_co_financial_report.internal_layout">
-                    <div class="page" style="page-break-after: always;">
-                        <style>
-                            .co-table { width: 100%; border-collapse: collapse; font-size: 10px; table-layout: fixed; }
-                            .co-table th, .co-table td { padding: 2px 4px; vertical-align: top; overflow-wrap: break-word; }
-                            .co-table th { background: #e8edf2; border-bottom: 1px solid #8090a0; }
-                            .co-table .co-total { font-weight: bold; border-top: 1px solid #8090a0; }
-                            .co-table .co-header { font-weight: bold; background: #f3f5f7; }
-                            .co-equity { font-size: 8.5px; }
-                            .co-number { text-align: right; white-space: nowrap; }
-                            .co-title { text-align: center; margin-bottom: 12px; }
-                        </style>
-                        <div class="co-title">
-                            <h3 style="margin: 0;" t-out="statement['company'].name" />
-                            <div>NIT: <span t-out="statement['company'].vat or ''" /></div>
-                            <h4 style="margin: 5px 0;" t-out="statement['title']" />
-                            <div t-if="not statement['equity']">
-                                <t t-if="docs.statement_type == 'bs'">Al <span t-out="statement['date_to']" /></t>
-                                <t t-else="">Del <span t-out="statement['date_from']" /> al <span t-out="statement['date_to']" /></t>
-                            </div>
-                            <div t-if="section['period']" t-out="section['period']" />
-                            <div>Cifras expresadas en <span t-out="statement['currency'].name" /></div>
-                            <div t-if="statement['drafts']">Incluye asientos en borrador</div>
+                <t t-call="account_financial_report.internal_layout">
+                    <div class="page" t-att-style="'page-break-after: always;' if not section_last else None">
+                        <div class="row">
+                            <h4 class="mt0" style="text-align: center;" t-out="title" />
                         </div>
-                        <table t-att-class="'co-table co-equity' if statement['equity'] else 'co-table'">
-                            <colgroup>
-                                <col t-att-style="'width: 27%;' if statement['equity'] else 'width: 58%;'" />
-                                <col t-foreach="section['columns']" t-as="column" t-att-style="'width: ' + str((73 if statement['equity'] else 42) / len(section['columns'])) + '%;'" />
-                            </colgroup>
-                            <thead><tr><th>Concepto</th><th class="co-number" t-foreach="section['columns']" t-as="column" t-out="column" style="white-space: normal;" /></tr></thead>
-                            <tbody>
-                                <tr t-foreach="section['rows']" t-as="row" t-att-class="'co-header' if row['header'] else ('co-total' if row['total'] else '')">
-                                    <td><span t-out="row['name']" t-att-res-model="'account.move.line' if row['domain'] and not row['header'] else None" t-att-domain="row['domain'] if row['domain'] and not row['header'] else None" title="Ver movimientos contables" /></td>
-                                    <td class="co-number" t-foreach="row['formatted']" t-as="amount"><span t-if="not row['header']" t-out="amount" t-att-res-model="'account.move.line' if row['domains'][amount_index] else None" t-att-domain="row['domains'][amount_index] or None" title="Ver movimientos contables" /></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="act_as_table data_table">
+                            <div class="act_as_row labels">
+                                <div class="act_as_cell">NIT</div>
+                                <div class="act_as_cell">Período</div>
+                                <div class="act_as_cell">Asientos</div>
+                            </div>
+                            <div class="act_as_row">
+                                <div class="act_as_cell" t-out="statement['company'].vat or ''" />
+                                <div class="act_as_cell">
+                                    <t t-if="section['period']" t-out="section['period']" />
+                                    <t t-elif="docs.statement_type == 'bs'">Al <span t-out="statement['date_to']" /></t>
+                                    <t t-else="">Del <span t-out="statement['date_from']" /> al <span t-out="statement['date_to']" /></t>
+                                </div>
+                                <div class="act_as_cell" t-out="'Incluye asientos en borrador' if statement['drafts'] else 'Asientos publicados'" />
+                            </div>
+                        </div>
+                        <div class="act_as_table data_table" style="margin-top: 10px;">
+                            <div class="act_as_thead">
+                                <div class="act_as_row labels">
+                                    <div class="act_as_cell left" t-att-style="'width: 27%;' if statement['equity'] else 'width: 58%;'">Concepto</div>
+                                    <div class="act_as_cell" t-foreach="section['columns']" t-as="column" t-out="column" t-att-style="'width: ' + str((73 if statement['equity'] else 42) / len(section['columns'])) + '%;'" />
+                                </div>
+                            </div>
+                            <div class="act_as_tbody">
+                                <div t-foreach="section['rows']" t-as="row" t-att-class="'act_as_row account_title labels' if row['header'] else ('act_as_row account_title' if row['total'] else 'act_as_row lines')">
+                                    <div class="act_as_cell left"><span t-out="row['name']" t-att-res-model="'account.move.line' if row['domain'] and not row['header'] else None" t-att-domain="row['domain'] if row['domain'] and not row['header'] else None" title="Ver movimientos contables" /></div>
+                                    <div class="act_as_cell amount" t-foreach="row['formatted']" t-as="amount"><span t-if="not row['header']" t-out="amount" t-att-res-model="'account.move.line' if row['domains'][amount_index] else None" t-att-domain="row['domains'][amount_index] or None" title="Ver movimientos contables" /></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </t>
             </t>

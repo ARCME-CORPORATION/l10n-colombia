@@ -48,32 +48,6 @@ class FinancialReportWizard(models.TransientModel):
     def _onchange_statement_type(self):
         self.comparison = self.statement_type != "equity"
 
-    def action_configure_concepts(self):
-        self._validate_statement()
-        template = self.env.ref(
-            f"l10n_co_financial_report.report_{self.statement_type}"
-        )
-        return {
-            "type": "ir.actions.act_window",
-            "name": self.env._("Configurar conceptos"),
-            "res_model": "mis.report",
-            "res_id": template.id,
-            "view_mode": "form",
-            "target": "current",
-        }
-
-    def action_map_accounts(self):
-        self._validate_statement()
-        return {
-            "type": "ir.actions.act_window",
-            "name": self.env._("Mapeo de cuentas para estados financieros"),
-            "res_model": "account.account",
-            "view_mode": "list,form",
-            "domain": [("company_ids", "in", self.company_id.ids)],
-            "context": {"allowed_company_ids": self.company_id.ids},
-            "target": "current",
-        }
-
     def _get_kpi_domain(self, aep, kpi, start, end, component=None, visited=None):
         """Trace formula references; keep each accounting term's own date scope."""
         visited = set(visited or ())

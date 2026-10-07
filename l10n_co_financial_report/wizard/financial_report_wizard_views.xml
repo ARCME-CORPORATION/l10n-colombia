@@ -13,10 +13,6 @@
                     <field name="comparison" string="Comparar con el año anterior" />
                     <field name="target_move" string="Asientos" />
                 </group>
-                <group string="Configuración">
-                    <button name="action_map_accounts" string="Mapear cuentas" type="object" />
-                    <button name="action_configure_concepts" string="Configurar conceptos" type="object" />
-                </group>
                 <footer>
                     <button name="button_export_html" string="Visualizar" type="object" class="oe_highlight" />
                     <button name="button_export_pdf" string="Descargar PDF" type="object" />

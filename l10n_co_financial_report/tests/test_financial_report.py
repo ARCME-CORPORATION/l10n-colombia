@@ -247,7 +247,7 @@ class TestFinancialReport(TransactionCase):
             html, _ = service._render_qweb_html(
                 f"l10n_co_financial_report.action_{code}_html", wizard.ids, data=data
             )
-            self.assertIn(b"co-table", html)
+            self.assertIn(b"data_table", html)
             self.assertIn(b'res-model="account.move.line"', html)
             self.assertNotIn(b"mis_report_widget", html)
             xlsx, _ = service._render_xlsx(

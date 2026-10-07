@@ -13,12 +13,12 @@ class FinancialStatementXlsx(models.AbstractModel):
         statement = wizard._get_statement_data()
         decimals = statement["currency"].decimal_places
         number_format = "#,##0" + ("." + "0" * decimals if decimals else "")
-        title_format = workbook.add_format({"bold": True, "font_size": 14})
-        header_format = workbook.add_format({"bold": True, "bg_color": "#E8EDF2"})
-        number = workbook.add_format({"num_format": number_format})
-        total_number = workbook.add_format(
-            {"num_format": number_format, "bold": True, "top": 1}
+        title_format = workbook.add_format({"bold": True})
+        header_format = workbook.add_format(
+            {"bold": True, "border": True, "bg_color": "#FFFFCC"}
         )
+        number = workbook.add_format({"num_format": number_format})
+        total_number = workbook.add_format({"num_format": number_format, "bold": True})
         for index, section in enumerate(statement["sections"]):
             sheet = workbook.add_worksheet(f"Estado {index + 1}")
             sheet.set_landscape() if statement["equity"] else sheet.set_portrait()

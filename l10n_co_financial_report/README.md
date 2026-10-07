@@ -55,7 +55,7 @@ validate Odoo installation, ORM behavior, permissions or PDF/XLSX rendering.
 3. Set **Colombian equity movement** on miscellaneous journal entries: contributions, distributions, transfers, corrections, result closing or other movements. Mixed entries with different movement types must be split.
 4. Mark result-closing entries as **Cierre de resultados**. Income and expenses in these entries are excluded from the income statement, but retained in the balance sheet and equity reconciliation. Do not exclude closing entries from the MIS instance's global filter.
 5. Map equity accounts for other comprehensive income (ORI) to the reclassifiable or non-reclassifiable category. Include the associated tax effects in these categories so the displayed movements are net of tax. Closing transfers out of ORI must be marked as closing entries; reserve transfers and corrections must have their appropriate movement type.
-6. Use **Configurar conceptos** in the assistant to edit the built-in template's labels, order and formulas. Template data uses `noupdate` to preserve local edits on upgrade. These assistants use the three built-in templates; duplicate templates can be used separately in MIS instances. Do not sum snapshots across periods: balance and equity KPIs have accumulation disabled.
+6. Open **Accounting > Configuration > MIS Reporting > MIS Report Templates** to edit the built-in template's labels, order and formulas. Template data uses `noupdate` to preserve local edits on upgrade. These assistants use the three built-in templates; duplicate templates can be used separately in MIS instances. Do not sum snapshots across periods: balance and equity KPIs have accumulation disabled.
 
 There is no automatic maturity analysis, NIIF measurement adjustment, comparative
 restatement or determination of whether an ORI item can be reclassified. The
@@ -80,6 +80,9 @@ Each menu opens an Account Financial Reports assistant with company, start date,
 end date, previous-year comparison and posted/all entry options. Click
 **Visualizar**, **Descargar PDF** or **Descargar Excel**. The reports use native
 QWeb HTML/PDF and OCA `report_xlsx`; the browser does not load a MIS widget.
+HTML/PDF reuse Account Financial Reports layouts, typography and table styles.
+The assistant contains only report filters and export buttons; mapping and formula
+configuration are maintained beforehand under Accounting Configuration.
 MIS Builder evaluates the financial formulas on the server without creating
 persistent report instances. Previously created MIS instances remain available.
 
@@ -101,14 +104,15 @@ the company's access rules and the posted/all filter. Amounts derived from
 subtractions show contributing items, whose unsigned union need not sum to the
 displayed result. PDF and Excel remain ordinary exports.
 
-Use **Mapear cuentas** to open the company's chart of accounts. Each account's
+Before generating reports, open **Accounting > Configuration > Chart of Accounts**. Each account's
 **Categoría de estados financieros colombianos** selects its reporting concept;
 edit this column in the account list or the account form. Defaults
 come from the Odoo account type, not Colombian account-code prefixes. Review
 the defaults before issuing reports. For equity changes, classify each journal
 entry with its **Movimiento de patrimonio colombiano**.
 
-Use **Configurar conceptos** to edit the selected MIS report template: labels,
+Open **Accounting > Configuration > MIS Reporting > MIS Report Templates** to
+edit the corresponding Colombian report template: labels,
 order and formulas determine the displayed rows and their account filters.
 Changing formulas also changes the journal-item links. The category selection
 on accounts is predefined; adding new category choices requires module code,

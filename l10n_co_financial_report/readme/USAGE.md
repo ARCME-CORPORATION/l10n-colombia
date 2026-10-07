@@ -8,6 +8,9 @@ Each menu opens an Account Financial Reports assistant with company, start date,
 end date, previous-year comparison and posted/all entry options. Click
 **Visualizar**, **Descargar PDF** or **Descargar Excel**. The reports use native
 QWeb HTML/PDF and OCA `report_xlsx`; the browser does not load a MIS widget.
+HTML/PDF reuse Account Financial Reports layouts, typography and table styles.
+The assistant contains only report filters and export buttons; mapping and formula
+configuration are maintained beforehand under Accounting Configuration.
 MIS Builder evaluates the financial formulas on the server without creating
 persistent report instances. Previously created MIS instances remain available.
 
@@ -29,14 +32,15 @@ the company's access rules and the posted/all filter. Amounts derived from
 subtractions show contributing items, whose unsigned union need not sum to the
 displayed result. PDF and Excel remain ordinary exports.
 
-Use **Mapear cuentas** to open the company's chart of accounts. Each account's
+Before generating reports, open **Accounting > Configuration > Chart of Accounts**. Each account's
 **Categoría de estados financieros colombianos** selects its reporting concept;
 edit this column in the account list or the account form. Defaults
 come from the Odoo account type, not Colombian account-code prefixes. Review
 the defaults before issuing reports. For equity changes, classify each journal
 entry with its **Movimiento de patrimonio colombiano**.
 
-Use **Configurar conceptos** to edit the selected MIS report template: labels,
+Open **Accounting > Configuration > MIS Reporting > MIS Report Templates** to
+edit the corresponding Colombian report template: labels,
 order and formulas determine the displayed rows and their account filters.
 Changing formulas also changes the journal-item links. The category selection
 on accounts is predefined; adding new category choices requires module code,
